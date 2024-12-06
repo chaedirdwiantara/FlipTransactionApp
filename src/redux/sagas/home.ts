@@ -1,14 +1,18 @@
 import { call, put, takeLatest } from 'redux-saga/effects';
-import axios from 'axios';
+import axios, { AxiosResponse } from 'axios';
 import { fetchDataSuccess, fetchDataFailure } from '../actions/home';
 import { FETCH_DATA_REQUEST } from '../../interface/redux.interface';
 
-function* fetchDataSaga(): Generator<any, any, any> {
+function* fetchDataSaga() {
   try {
-    const response = yield call(axios.get, 'https://jsonplaceholder.typicode.com/posts');
+    const response = (yield call(axios.get, 'https://recruitment-test.flip.id/frontend-test')) as AxiosResponse;
     yield put(fetchDataSuccess(response.data));
-  } catch (error: any) {
-    yield put(fetchDataFailure(error.message));
+  } catch (error) {
+    if (error instanceof Error) {
+      yield put(fetchDataFailure(error.message));
+    } else {
+      yield put(fetchDataFailure('An unknown error occurred'));
+    }
   }
 }
 

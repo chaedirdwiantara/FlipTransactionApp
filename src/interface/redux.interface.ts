@@ -1,3 +1,5 @@
+import { TransactionData, Transactions } from "./transaction.interface";
+
 // Action Types
 export const FETCH_DATA_REQUEST = 'FETCH_DATA_REQUEST';
 export const FETCH_DATA_SUCCESS = 'FETCH_DATA_SUCCESS';
@@ -10,7 +12,7 @@ interface FetchDataRequestAction {
 
 interface FetchDataSuccessAction {
   type: typeof FETCH_DATA_SUCCESS;
-  payload: any[]; // Adjust according to the data you expect
+  payload: Transactions[];
 }
 
 interface FetchDataFailureAction {
@@ -23,7 +25,7 @@ export type HomeActionTypes = FetchDataRequestAction | FetchDataSuccessAction | 
 // State Type
 export interface HomeState {
   loading: boolean;
-  data: any[]; // Adjust according to the data you expect
+  data: Transactions[];
   error: string;
 }
 
