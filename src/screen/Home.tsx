@@ -21,6 +21,7 @@ const HomeScreen = ({navigation}: {navigation: NativeStackNavigationProp<RootSta
   );
 
   const [searchState, setSearchState] = useState('');
+  const [filteredData, setFilteredData] = useState<Transactions[]>([]);
 
   useEffect(() => {
     dispatch(fetchDataRequest());
@@ -28,12 +29,19 @@ const HomeScreen = ({navigation}: {navigation: NativeStackNavigationProp<RootSta
 
   const transactionIds = Object.values(data) as Transactions[];
 
+  useEffect(() => {
+    const searchText = searchState.toLowerCase();
+    const filtered = transactionIds.filter((transaction) => {
+      const nameMatch = transaction?.beneficiary_name?.toString().toLowerCase().includes(searchText);
+      return nameMatch;
+    });
+    setFilteredData(filtered);
+  }, [searchState]);
+
   const onPress = ({item}: {item: Transactions}) => {
-    console.log(item);
     navigation.navigate('DetailTransaction', {item});
   }
 
-  
   return (
     <SafeAreaView style={styles.root}>
     <>
@@ -43,11 +51,12 @@ const HomeScreen = ({navigation}: {navigation: NativeStackNavigationProp<RootSta
           onChangeText={(newText: string) => setSearchState(newText)}
           rightIcon={searchState !== '' && true}
           reset={() => setSearchState('')}
+          placeholder="Cari nama, bank, atau nominal"
         />
         <Gap height={20} />
         <FlatList
           showsVerticalScrollIndicator={false}
-          data={transactionIds}
+          data={searchState ? filteredData : transactionIds}
           renderItem={({item}) => (
             <ListTransactionCard item={item} onPress={onPress} />
           )}
