@@ -11,8 +11,10 @@ import { mvs } from 'react-native-size-matters';
 import { EmptyState } from '../components/molecule';
 import ListTransactionCard from '../components/molecule/ListCard/ListTransactionCard';
 import { Transactions } from '../interface/transaction.interface';
+import { RootStackParams } from '../navigations';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
-const HomeScreen = () => {
+const HomeScreen = ({navigation}: {navigation: NativeStackNavigationProp<RootStackParams>}) => {
   const dispatch = useDispatch<typeof store.dispatch>();
   const {data, loading, error} = useSelector(
     (state: ApplicationState) => state.home,
@@ -28,6 +30,7 @@ const HomeScreen = () => {
 
   const onPress = ({item}: {item: Transactions}) => {
     console.log(item);
+    navigation.navigate('DetailTransaction', {item});
   }
 
   
@@ -35,15 +38,13 @@ const HomeScreen = () => {
     <SafeAreaView style={styles.root}>
     <>
       <View style={styles.bodyContainer}>
-            <SearchBar
-              value={searchState}
-              onChangeText={(newText: string) => setSearchState(newText)}
-              rightIcon={searchState !== '' && true}
-              reset={() => setSearchState('')}
-            />
-
+        <SearchBar
+          value={searchState}
+          onChangeText={(newText: string) => setSearchState(newText)}
+          rightIcon={searchState !== '' && true}
+          reset={() => setSearchState('')}
+        />
         <Gap height={20} />
-
         <FlatList
           showsVerticalScrollIndicator={false}
           data={transactionIds}

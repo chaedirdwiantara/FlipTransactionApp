@@ -25,12 +25,14 @@ import {FeedScreen, HomeScreen, RewardScreen, ProfileScreen} from '../screen';
 
 // Icon
 import {FeedIcon, HomeIcon, ProfileIcon, RewardsIcon} from '../assets/icon';
-
+import DetailTransaction from '../screen/DetailTransaction';
+import { Transactions } from '../interface/transaction.interface';
 // interface
 
 export type RootStackParams = {
   SplashScreen: undefined;
   MainTab: undefined;
+  DetailTransaction: {item: Transactions};
 };
 
 export type MainTabParams = {
@@ -136,6 +138,7 @@ export const RootStackScreen = () => (
     // initialRouteName={'SplashScreen'}
   >
     <RootStack.Screen name="MainTab" component={TabScreen} />
+    <RootStack.Screen name="DetailTransaction" component={DetailTransaction} />
   </RootStack.Navigator>
 );
 
