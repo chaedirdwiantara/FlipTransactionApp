@@ -2,11 +2,11 @@
 import { Button } from "./Button/Button";
 import { EmptyState } from "./EmptyState/EmptyState";
 import FilterModal from "./ModalFilter";
-import InputText from "./InputText/inputText";
+import SearchBar from "./SearchBar";
 
 export {
     Button,
-    InputText,
+    SearchBar,
     EmptyState,
     FilterModal,
 };
