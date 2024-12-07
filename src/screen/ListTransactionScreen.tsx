@@ -70,7 +70,7 @@ const ListTransactionScreen = ({navigation}: {navigation: NativeStackNavigationP
           placeholder="Cari nama, bank, atau nominal"
           selectedFilter={selectedFilter}
         />
-        <Gap height={20} />
+        <Gap height={10} />
         <FlatList
           // keyExtractor={(item) => item.id.toString()} // Menambahkan keyExtractor
           // initialNumToRender={10} // Mengatur initialNumToRender
@@ -101,7 +101,7 @@ const styles = StyleSheet.create({
   bodyContainer: {
     flex: 1,
     padding: widthResponsive(20),
-    paddingHorizontal: widthResponsive(10),
+    paddingHorizontal: widthResponsive(6),
   },
   filterContainer: {
     width: '100%',
