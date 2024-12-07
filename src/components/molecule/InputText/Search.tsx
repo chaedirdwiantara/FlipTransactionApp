@@ -13,6 +13,7 @@ import {ms, mvs} from 'react-native-size-matters';
 
 import {color, font} from '../../../theme';
 import {widthResponsive} from '../../../utils/dimensionFormat';
+import ChevronDownIcon from '../../../assets/icon/ChevronDown.icon';
 
 interface InputProps extends TextInputProps {
     leftIcon?: React.ReactNode;
@@ -42,8 +43,9 @@ interface InputProps extends TextInputProps {
   
     const rightIconComp = () => {
       return (
-        <TouchableOpacity onPress={filterOnPress} style={{padding: ms(4)}}>
+        <TouchableOpacity onPress={filterOnPress} style={styles.rightIconContainer}>
           <Text style={styles.filterStyle}>{selectedFilter}</Text>
+          <ChevronDownIcon/>
         </TouchableOpacity>
       );
     };
@@ -90,6 +92,11 @@ const styles = StyleSheet.create({
     backgroundColor: color.Neutral[10],
     borderWidth: 1,
     borderColor: color.Neutral[30],
+  },
+  rightIconContainer: {
+    padding: ms(4),
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   leftIconStyle: {
     marginRight: widthResponsive(8),

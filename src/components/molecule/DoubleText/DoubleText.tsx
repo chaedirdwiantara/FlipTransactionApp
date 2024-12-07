@@ -27,7 +27,7 @@ const styles = StyleSheet.create({
     },
     title: {
         fontSize: widthResponsive(16),
-        fontWeight: 'bold',
+        fontWeight: '600',
     },
     value: {
         fontSize: widthResponsive(16),

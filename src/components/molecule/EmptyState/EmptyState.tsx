@@ -28,14 +28,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   text: {
-    color: Color.Neutral[10],
+    color: Color.Dark[800],
     textAlign: 'center',
     maxWidth: '90%',
     fontSize: mvs(15),
     fontFamily: 'Inter-Medium',
   },
   subtitle: {
-    color: Color.Neutral[10],
+    color: Color.Dark[800],
     maxWidth: '90%',
     textAlign: 'center',
     paddingTop: widthResponsive(4),

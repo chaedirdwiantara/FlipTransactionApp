@@ -11,6 +11,7 @@ import React, {FC} from 'react';
 import Modal from 'react-native-modal';
 import {color, font} from '../../../theme';
 import {widthResponsive} from '../../../utils';
+import FilterButton from '../../atom/FilterButton/FilterButton';
 
 export const {width} = Dimensions.get('screen');
 
@@ -60,19 +61,12 @@ const FilterModal: FC<ModalFilterProps> = (props: ModalFilterProps) => {
               containerStyle,
             ]}>
             {dataFilter.map((item, index) => (
-              <TouchableOpacity
+              <FilterButton
                 key={index.toString()}
-                style={[styles.buttonContainer]}
+                label={item.label}
+                isSelected={selectedFilter === item.label}
                 onPress={() => filterButtonHandler(item.label)}
-                disabled={item?.disabled ?? false}>
-                <Text
-                  style={[
-                    styles.textFilter,
-                    selectedFilter === item.label && styles.selectedFilter,
-                  ]}>
-                  {item.label}
-                </Text>
-              </TouchableOpacity>
+              />
             ))}
           </View>
         </Modal>
@@ -88,27 +82,8 @@ const styles = StyleSheet.create({
     backgroundColor: color.Neutral[10],
     alignItems: 'flex-start',
     borderRadius: 4,
-    paddingTop: widthResponsive(20),
+    paddingTop: widthResponsive(24),
     paddingHorizontal: widthResponsive(14),
     marginHorizontal: widthResponsive(20),
-  },
-  buttonContainer: {
-    flexDirection: 'row',
-    backgroundColor: 'transparent',
-    justifyContent: 'flex-start',
-    alignItems: 'center',
-    paddingHorizontal: widthResponsive(12),
-    paddingVertical: widthResponsive(5),
-    borderColor: color.Dark[600],
-    marginBottom: widthResponsive(20),
-  },
-  textFilter: {
-    fontSize: widthResponsive(16),
-    fontFamily: font.InterRegular,
-    fontWeight: '600',
-    color: color.Dark[900],
-  },
-  selectedFilter: {
-    color: color.Primary[500],
   },
 });
