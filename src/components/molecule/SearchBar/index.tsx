@@ -12,14 +12,14 @@ interface SearchProps extends TextInputProps {
   errorMsg?: string;
   password?: boolean;
   backgroundColor?: string;
-  rightIcon?: boolean;
-  reset?: () => void;
+  filterBtnOnPress: () => void;
   containerStyle?: ViewStyle;
   placeholder?: string;
+  selectedFilter: string;
 }
 
 const SearchBar: React.FC<SearchProps> = props => {
-  const {onChangeText, value, rightIcon, reset, containerStyle, placeholder} = props;
+  const {onChangeText, value, filterBtnOnPress, containerStyle, placeholder, selectedFilter} = props;
   return (
     <View style={[styles.container, containerStyle]}>
       <Search
@@ -27,10 +27,10 @@ const SearchBar: React.FC<SearchProps> = props => {
         onChangeText={onChangeText}
         placeholder={placeholder}
         leftIcon={<SearchIcon stroke={color.Neutral[95]} />}
-        rightIcon={rightIcon}
-        reset={reset}
+        filterOnPress={filterBtnOnPress}
         containerStyle={styles.inputContainer}
-        {...props}
+        selectedFilter={selectedFilter}
+        {...(({ selectedFilter, ...rest }) => rest)(props)}
       />
     </View>
   );

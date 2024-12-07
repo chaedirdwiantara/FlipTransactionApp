@@ -2,6 +2,7 @@ import React from 'react';
 import {
   Platform,
   StyleSheet,
+  Text,
   TextInput,
   TextInputProps,
   TouchableOpacity,
@@ -12,18 +13,14 @@ import {ms, mvs} from 'react-native-size-matters';
 
 import {color, font} from '../../../theme';
 import {widthResponsive} from '../../../utils/dimensionFormat';
-import CloseIcon from '../../../assets/icon/Close.icon';
 
 interface InputProps extends TextInputProps {
-    fontSize?: number;
-    disabled?: boolean;
     leftIcon?: React.ReactNode;
-    rightIcon?: boolean;
-    rightIconComponent?: React.ReactNode;
-    reset?: () => void;
+    filterOnPress?: () => void;
     containerStyles?: ViewStyle;
     inputStyles?: ViewStyle;
     leftIconContainer?: ViewStyle;
+    selectedFilter: string;
   }
   
   const FontColor = color.Neutral[95];
@@ -33,22 +30,20 @@ interface InputProps extends TextInputProps {
       value,
       keyboardType,
       onChangeText,
-      disabled,
       leftIcon,
-      rightIcon,
-      rightIconComponent,
-      reset,
+      filterOnPress,
       onSubmitEditing,
       onEndEditing,
       containerStyles,
       inputStyles,
       leftIconContainer,
+      selectedFilter,
     } = props;
   
     const rightIconComp = () => {
       return (
-        <TouchableOpacity onPress={reset} style={{padding: ms(4)}}>
-          <CloseIcon stroke={FontColor} />
+        <TouchableOpacity onPress={filterOnPress} style={{padding: ms(4)}}>
+          <Text style={styles.filterStyle}>{selectedFilter}</Text>
         </TouchableOpacity>
       );
     };
@@ -70,18 +65,13 @@ interface InputProps extends TextInputProps {
             value={value}
             keyboardType={keyboardType}
             onChangeText={onChangeText}
-            editable={disabled ? false : true}
             placeholderTextColor={FontColor}
             onEndEditing={onEndEditing}
             onSubmitEditing={onSubmitEditing}
             {...props}
           />
           <View>
-            {rightIcon
-              ? rightIconComponent
-                ? rightIconComponent
-                : rightIconComp()
-              : null}
+            {rightIconComp()}
           </View>
         </View>
       </>
@@ -113,5 +103,11 @@ const styles = StyleSheet.create({
     fontWeight: '400',
     color: color.Dark[900],
     marginVertical: Platform.OS === 'ios' ? mvs(12.5) : 0,
+  },
+  filterStyle: {
+    fontSize: mvs(13),
+    fontFamily: font.InterLight,
+    fontWeight: 'bold',
+    color: color.Warning[900],
   },
 });

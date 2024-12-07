@@ -4,15 +4,17 @@ import {color} from '../theme';
 import {widthResponsive} from '../utils';
 import {useDispatch, useSelector} from 'react-redux';
 import {ApplicationState} from '../interface/redux.interface';
-import {fetchDataRequest} from '../redux/actions/home';
+import {fetchDataRequest, updateSortedData} from '../redux/actions/home';
 import store from '../redux/store';
 import { Gap, SearchBar } from '../components/atom';
 import { mvs } from 'react-native-size-matters';
-import { EmptyState } from '../components/molecule';
+import { EmptyState, FilterModal } from '../components/molecule';
 import ListTransactionCard from '../components/molecule/ListCard/ListTransactionCard';
 import { Transactions } from '../interface/transaction.interface';
 import { RootStackParams } from '../navigations';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { dataFilter } from '../data/dataFilter';
+import filterTransactions from '../hooks/useFilter';
 
 const HomeScreen = ({navigation}: {navigation: NativeStackNavigationProp<RootStackParams>}) => {
   const dispatch = useDispatch<typeof store.dispatch>();
@@ -21,25 +23,40 @@ const HomeScreen = ({navigation}: {navigation: NativeStackNavigationProp<RootSta
   );
 
   const [searchState, setSearchState] = useState('');
-  const [filteredData, setFilteredData] = useState<Transactions[]>([]);
+  const [searchFilteredData, setSearchFilteredData] = useState<Transactions[]>([]);
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [selectedFilter, setSelectedFilter] = useState('URUTKAN');
+
+  const transactionIds = Object.values(data) as Transactions[];
 
   useEffect(() => {
     dispatch(fetchDataRequest());
   }, [dispatch]);
 
-  const transactionIds = Object.values(data) as Transactions[];
-
   useEffect(() => {
     const searchText = searchState.toLowerCase();
-    const filtered = transactionIds.filter((transaction) => {
+    const searchFiltered = transactionIds.filter((transaction) => {
       const nameMatch = transaction?.beneficiary_name?.toString().toLowerCase().includes(searchText);
       return nameMatch;
     });
-    setFilteredData(filtered);
+    setSearchFilteredData(searchFiltered);
   }, [searchState]);
+
+  useEffect(() => {
+    const filtered = filterTransactions(transactionIds, selectedFilter);
+    dispatch(updateSortedData(filtered));
+  }, [selectedFilter]);
 
   const onPress = ({item}: {item: Transactions}) => {
     navigation.navigate('DetailTransaction', {item});
+  }
+
+  const filterBtnOnPress = () => {
+    setModalIsOpen(true);
+  }
+
+  const handleSetFilter = (label: string) => {
+    setSelectedFilter(label);
   }
 
   return (
@@ -49,20 +66,21 @@ const HomeScreen = ({navigation}: {navigation: NativeStackNavigationProp<RootSta
         <SearchBar
           value={searchState}
           onChangeText={(newText: string) => setSearchState(newText)}
-          rightIcon={searchState !== '' && true}
-          reset={() => setSearchState('')}
+          filterBtnOnPress={filterBtnOnPress}
           placeholder="Cari nama, bank, atau nominal"
+          selectedFilter={selectedFilter}
         />
         <Gap height={20} />
         <FlatList
           showsVerticalScrollIndicator={false}
-          data={searchState ? filteredData : transactionIds}
+          data={searchState ? searchFilteredData : transactionIds}
           renderItem={({item}) => (
             <ListTransactionCard item={item} onPress={onPress} />
           )}
           ListEmptyComponent={<EmptyState text="No data found" />}
         />
       </View>
+      <FilterModal modalVisible={modalIsOpen} toggleModal={() => setModalIsOpen(false)} dataFilter={dataFilter} setFilter={handleSetFilter} selectedFilter={selectedFilter} />
     </>
     </SafeAreaView>
   );

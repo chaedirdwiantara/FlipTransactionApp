@@ -4,6 +4,7 @@ import { TransactionData, Transactions } from "./transaction.interface";
 export const FETCH_DATA_REQUEST = 'FETCH_DATA_REQUEST';
 export const FETCH_DATA_SUCCESS = 'FETCH_DATA_SUCCESS';
 export const FETCH_DATA_FAILURE = 'FETCH_DATA_FAILURE';
+export const UPDATE_SORTED_DATA = 'UPDATE_SORTED_DATA';
 
 // Action Creators Interfaces
 interface FetchDataRequestAction {
@@ -20,7 +21,12 @@ interface FetchDataFailureAction {
   payload: string;
 }
 
-export type HomeActionTypes = FetchDataRequestAction | FetchDataSuccessAction | FetchDataFailureAction;
+interface UpdateSortedDataAction {
+  type: typeof UPDATE_SORTED_DATA;
+  payload: Transactions[];
+}
+
+export type HomeActionTypes = FetchDataRequestAction | FetchDataSuccessAction | FetchDataFailureAction | UpdateSortedDataAction;
 
 // State Type
 export interface HomeState {

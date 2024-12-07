@@ -18,16 +18,11 @@ interface ModalFilterProps {
   toggleModal: () => void;
   modalVisible: boolean;
   dataFilter: any[];
-  filterOnPress?: (label: string) => void;
-  sendCategory: (value: string) => void;
-  // xPosition: number;
-  // yPosition: number;
   containerStyle?: ViewStyle;
   textStyle?: TextStyle;
-  icon?: boolean;
-  buttonContainerStyle?: ViewStyle;
   onModalHide?: () => void;
-  selectedMenu?: (label: any) => void;
+  setFilter: (label: string) => void;
+  selectedFilter: string;
 }
 
 const FilterModal: FC<ModalFilterProps> = (props: ModalFilterProps) => {
@@ -35,23 +30,15 @@ const FilterModal: FC<ModalFilterProps> = (props: ModalFilterProps) => {
     toggleModal,
     modalVisible,
     dataFilter,
-    filterOnPress,
-    sendCategory,
-    // xPosition,
-    // yPosition,
     containerStyle,
-    textStyle,
-    icon,
-    buttonContainerStyle,
     onModalHide,
-    selectedMenu,
+    setFilter,
+    selectedFilter,
   } = props;
 
-  const filterButtonHandler = (data: any) => {
+  const filterButtonHandler = (label: string) => {
     toggleModal();
-    filterOnPress?.(data.label);
-    sendCategory?.(data.value);
-    selectedMenu?.(data);
+    setFilter(label);
   };
 
   return (
@@ -59,7 +46,7 @@ const FilterModal: FC<ModalFilterProps> = (props: ModalFilterProps) => {
       {modalVisible && (
         <Modal
           isVisible={modalVisible}
-          backdropOpacity={0}
+          backdropOpacity={0.5}
           backdropColor={color.Dark[800]}
           onBackdropPress={toggleModal}
           animationIn={'fadeIn'}
@@ -70,29 +57,23 @@ const FilterModal: FC<ModalFilterProps> = (props: ModalFilterProps) => {
           <View
             style={[
               styles.container,
-              
               containerStyle,
             ]}>
-            {/* {dataFilter.map((item, index) => (
+            {dataFilter.map((item, index) => (
               <TouchableOpacity
                 key={index.toString()}
-                style={[styles.buttonContainer, buttonContainerStyle]}
-                onPress={() => filterButtonHandler(item)}
+                style={[styles.buttonContainer]}
+                onPress={() => filterButtonHandler(item.label)}
                 disabled={item?.disabled ?? false}>
                 <Text
                   style={[
                     styles.textFilter,
-                    {
-                      color: item?.disabled
-                        ? color.Dark[100]
-                        : color.Neutral[10],
-                    },
-                    textStyle,
+                    selectedFilter === item.label && styles.selectedFilter,
                   ]}>
                   {item.label}
                 </Text>
               </TouchableOpacity>
-            ))} */}
+            ))}
           </View>
         </Modal>
       )}
@@ -104,11 +85,12 @@ export default FilterModal;
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: color.Dark[600],
-    borderColor: color.Dark[600],
+    backgroundColor: color.Neutral[10],
     alignItems: 'flex-start',
     borderRadius: 4,
-    paddingVertical: 5,
+    paddingTop: widthResponsive(20),
+    paddingHorizontal: widthResponsive(14),
+    marginHorizontal: widthResponsive(20),
   },
   buttonContainer: {
     flexDirection: 'row',
@@ -118,11 +100,15 @@ const styles = StyleSheet.create({
     paddingHorizontal: widthResponsive(12),
     paddingVertical: widthResponsive(5),
     borderColor: color.Dark[600],
+    marginBottom: widthResponsive(20),
   },
   textFilter: {
-    fontSize: widthResponsive(10),
+    fontSize: widthResponsive(16),
     fontFamily: font.InterRegular,
-    fontWeight: '500',
-    color: color.Neutral[10],
+    fontWeight: '600',
+    color: color.Dark[900],
+  },
+  selectedFilter: {
+    color: color.Primary[500],
   },
 });
