@@ -16,6 +16,8 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { dataFilter } from '../data/dataFilter';
 import filterTransactions from '../hooks/useFilter';
 
+const ITEM_HEIGHT = widthResponsive(100);
+
 const ListTransactionScreen = ({navigation}: {navigation: NativeStackNavigationProp<RootStackParams>}) => {
   const dispatch = useDispatch<typeof store.dispatch>();
   const {data, loading, error} = useSelector(
@@ -72,17 +74,17 @@ const ListTransactionScreen = ({navigation}: {navigation: NativeStackNavigationP
         />
         <Gap height={10} />
         <FlatList
-          // keyExtractor={(item) => item.id.toString()} // Menambahkan keyExtractor
-          // initialNumToRender={10} // Mengatur initialNumToRender
-          // getItemLayout={(data, index) => (
-          //   {length: ITEM_HEIGHT, offset: ITEM_HEIGHT * index, index}
-          // )}
+          keyExtractor={(item) => item.id.toString()}
+          initialNumToRender={10} 
+          getItemLayout={(data, index) => (
+            {length: ITEM_HEIGHT, offset: ITEM_HEIGHT * index, index}
+          )}
           showsVerticalScrollIndicator={false}
           data={searchState ? searchFilteredData : transactionIds}
           renderItem={({item}) => (
             <ListTransactionCard item={item} onPress={onPress} />
           )}
-          ListEmptyComponent={<EmptyState text="No data found" />}
+          ListEmptyComponent={<EmptyState text="Tidak ada data ditemukan" containerStyle={{marginTop: mvs(200)}}/>}
         />
       </View>
       <FilterModal modalVisible={modalIsOpen} toggleModal={() => setModalIsOpen(false)} dataFilter={dataFilter} setFilter={handleSetFilter} selectedFilter={selectedFilter} />
