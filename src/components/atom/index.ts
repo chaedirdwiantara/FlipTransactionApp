@@ -1,5 +1,5 @@
 import Gap from './Gap/Gap';
-import SearchBar from '../molecule/SearchBar';
+import SearchBar from '../molecule/SearchBar/SearchBar';
 import LoadingIndicator from './Loading';
 
 export {
