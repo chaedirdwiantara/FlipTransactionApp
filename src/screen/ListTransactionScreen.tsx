@@ -16,7 +16,7 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { dataFilter } from '../data/dataFilter';
 import filterTransactions from '../hooks/useFilter';
 
-const HomeScreen = ({navigation}: {navigation: NativeStackNavigationProp<RootStackParams>}) => {
+const ListTransactionScreen = ({navigation}: {navigation: NativeStackNavigationProp<RootStackParams>}) => {
   const dispatch = useDispatch<typeof store.dispatch>();
   const {data, loading, error} = useSelector(
     (state: ApplicationState) => state.home,
@@ -48,7 +48,7 @@ const HomeScreen = ({navigation}: {navigation: NativeStackNavigationProp<RootSta
   }, [selectedFilter]);
 
   const onPress = ({item}: {item: Transactions}) => {
-    navigation.navigate('DetailTransaction', {item});
+    navigation.navigate('DetailTransactionScreen', {item});
   }
 
   const filterBtnOnPress = () => {
@@ -72,6 +72,11 @@ const HomeScreen = ({navigation}: {navigation: NativeStackNavigationProp<RootSta
         />
         <Gap height={20} />
         <FlatList
+          // keyExtractor={(item) => item.id.toString()} // Menambahkan keyExtractor
+          // initialNumToRender={10} // Mengatur initialNumToRender
+          // getItemLayout={(data, index) => (
+          //   {length: ITEM_HEIGHT, offset: ITEM_HEIGHT * index, index}
+          // )}
           showsVerticalScrollIndicator={false}
           data={searchState ? searchFilteredData : transactionIds}
           renderItem={({item}) => (
@@ -86,7 +91,7 @@ const HomeScreen = ({navigation}: {navigation: NativeStackNavigationProp<RootSta
   );
 };
 
-export default HomeScreen;
+export default ListTransactionScreen;
 
 const styles = StyleSheet.create({
   root: {

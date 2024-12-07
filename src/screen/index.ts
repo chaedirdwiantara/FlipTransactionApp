@@ -1,8 +1,7 @@
-import FeedScreen from "./Feed";
-import HomeScreen from "./Home";
-import RewardScreen from "./Reward";
-import ProfileScreen from "./Profile";
+import ListTransactionScreen from "./ListTransactionScreen";
+import DetailTransactionScreen from "./DetailTransactionScreen";
+import { SplashScreen } from "./SplashScreen";
 
 export {
-    HomeScreen,FeedScreen,RewardScreen,ProfileScreen
+    ListTransactionScreen, DetailTransactionScreen, SplashScreen
 }
