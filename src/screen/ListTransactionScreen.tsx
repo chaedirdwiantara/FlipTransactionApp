@@ -6,7 +6,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import {ApplicationState} from '../interface/redux.interface';
 import {fetchDataRequest, updateSortedData} from '../redux/actions/home';
 import store from '../redux/store';
-import { Gap, SearchBar } from '../components/atom';
+import { Gap, LoadingIndicator, SearchBar } from '../components/atom';
 import { mvs } from 'react-native-size-matters';
 import { EmptyState, FilterModal } from '../components/molecule';
 import ListTransactionCard from '../components/molecule/ListCard/ListTransactionCard';
@@ -20,7 +20,7 @@ const ITEM_HEIGHT = widthResponsive(100);
 
 const ListTransactionScreen = ({navigation}: {navigation: NativeStackNavigationProp<RootStackParams>}) => {
   const dispatch = useDispatch<typeof store.dispatch>();
-  const {data, loading, error} = useSelector(
+  const {data, loading} = useSelector(
     (state: ApplicationState) => state.home,
   );
 
@@ -64,7 +64,7 @@ const ListTransactionScreen = ({navigation}: {navigation: NativeStackNavigationP
   return (
     <SafeAreaView style={styles.root}>
     <>
-      <View style={styles.bodyContainer}>
+      {loading ? <LoadingIndicator /> : <View style={styles.bodyContainer}>
         <SearchBar
           value={searchState}
           onChangeText={(newText: string) => setSearchState(newText)}
@@ -85,8 +85,9 @@ const ListTransactionScreen = ({navigation}: {navigation: NativeStackNavigationP
             <ListTransactionCard item={item} onPress={onPress} />
           )}
           ListEmptyComponent={<EmptyState text="Tidak ada data ditemukan" containerStyle={{marginTop: mvs(200)}}/>}
-        />
-      </View>
+          />
+        </View>
+      }
       <FilterModal modalVisible={modalIsOpen} toggleModal={() => setModalIsOpen(false)} dataFilter={dataFilter} setFilter={handleSetFilter} selectedFilter={selectedFilter} />
     </>
     </SafeAreaView>
