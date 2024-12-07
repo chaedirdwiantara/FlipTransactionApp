@@ -7,6 +7,7 @@ import { RouteProp } from '@react-navigation/native'
 import { Gap } from '../components/atom'
 import { useNavigation } from '@react-navigation/native'
 import DoubleText from '../components/molecule/DoubleText/DoubleText'
+import { capitalizeText, formatCurrency, formatDate } from '../utils/formatter'
 
 const DetailTransactionScreen = React.memo(({route}: {route: RouteProp<RootStackParams, 'DetailTransactionScreen'>}) => {
     const { item } = route.params;
@@ -30,11 +31,11 @@ const DetailTransactionScreen = React.memo(({route}: {route: RouteProp<RootStack
                 </TouchableOpacity>
             </View>
             <View style={styles.bodyContainer}>
-                <Text style={[styles.textStyle,{fontSize: widthResponsive(20)}]}>{item.sender_bank.toString()}{' -> '}{item.beneficiary_bank.toString()}</Text>
+                <Text style={[styles.textStyle,{fontSize: widthResponsive(20)}]}>{capitalizeText(item.sender_bank.toString())}{' -> '}{capitalizeText(item.beneficiary_bank.toString())}</Text>
                 <Gap height={20} />
                 <View style={styles.doubleTextContainer}>
-                    <DoubleText title={item.beneficiary_name.toString()} value={item.account_number.toString()} style={{flex: 3}} />
-                    <DoubleText title={'NOMINAL'} value={`Rp. ${item.amount.toString()}`} style={{flex: 2}} />
+                    <DoubleText title={item.beneficiary_name.toString().toUpperCase()} value={item.account_number.toString()} style={{flex: 3}} />
+                    <DoubleText title={'NOMINAL'} value={formatCurrency(parseInt(item.amount.toString()))} style={{flex: 2}} />
                 </View>
                 <Gap height={20} />
                 <View style={styles.doubleTextContainer}>
@@ -43,7 +44,7 @@ const DetailTransactionScreen = React.memo(({route}: {route: RouteProp<RootStack
                 </View>
                 <Gap height={20} />
                 <View style={styles.doubleTextContainer}>
-                    <DoubleText title={'WAKTU DIBUAT'} value={item.created_at.toString()}/>
+                    <DoubleText title={'WAKTU DIBUAT'} value={formatDate(item.created_at.toString())}/>
                 </View>
             </View>
         </SafeAreaView>

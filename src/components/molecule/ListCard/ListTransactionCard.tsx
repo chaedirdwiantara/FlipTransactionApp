@@ -4,6 +4,7 @@ import { color } from '../../../theme'
 import { widthResponsive } from '../../../utils/dimensionFormat'
 import { Transactions } from '../../../interface/transaction.interface'
 import { Gap } from '../../atom'
+import { capitalizeText, formatCurrency, formatDate } from '../../../utils'
 
 interface Props {
   item: Transactions;
@@ -16,17 +17,17 @@ const ListTransactionCard = ({ item, onPress }: Props) => {
       <View style={[styles.cardLeftStyle, {backgroundColor: item.status.toString() === 'SUCCESS' ? color.Success[400] : color.Warning[700]}]} />
       <View style={styles.mainBodyContainer}>
         <Text style={[styles.textStyle, {fontWeight: 'bold'}]}>
-          {item.sender_bank.toString()}{' -> '} {item.beneficiary_bank.toString()}
+          {capitalizeText(item.sender_bank.toString())} {' -> '} {capitalizeText(item.beneficiary_bank.toString())}
         </Text>
         <Gap height={5} />
         <Text style={styles.textStyle}>
-          {item.beneficiary_name.toString()}
+          {item.beneficiary_name.toString().toUpperCase()}
         </Text>
         <Gap height={5} />
         <Text style={styles.textStyle}>
-          {item.amount.toString()} {' . '} {item.created_at.toString()}
+          {formatCurrency(parseInt(item.amount.toString()))} {' . '} {formatDate(item.created_at.toString())}
         </Text>
-      </View>
+      </View> 
     </TouchableOpacity>
   )
 }
