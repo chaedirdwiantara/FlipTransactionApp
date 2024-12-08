@@ -1,5 +1,5 @@
 import {FlatList, SafeAreaView, StyleSheet, View} from 'react-native';
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {color} from '../theme';
 import {filterTransactionsBySearch, widthResponsive} from '../utils';
 import {useDispatch, useSelector} from 'react-redux';
@@ -51,9 +51,12 @@ const ListTransactionScreen = ({
 
   useFilter(transactionIds, selectedFilter);
 
-  const onPress = ({item}: {item: Transactions}) => {
-    navigation.navigate('DetailTransactionScreen', {item});
-  };
+  const onPress = useCallback(
+    ({item}: {item: Transactions}) => {
+      navigation.navigate('DetailTransactionScreen', {item});
+    },
+    [navigation],
+  );
 
   const filterBtnOnPress = () => {
     setModalIsOpen(true);
