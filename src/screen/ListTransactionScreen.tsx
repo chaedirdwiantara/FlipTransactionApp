@@ -6,26 +6,32 @@ import {useDispatch, useSelector} from 'react-redux';
 import {ApplicationState} from '../interface/redux.interface';
 import {fetchDataRequest, updateSortedData} from '../redux/actions/home';
 import store from '../redux/store';
-import { Gap, LoadingIndicator, SearchBar } from '../components/atom';
-import { mvs } from 'react-native-size-matters';
-import { EmptyState, FilterModal } from '../components/molecule';
+import {Gap, LoadingIndicator, SearchBar} from '../components/atom';
+import {mvs} from 'react-native-size-matters';
+import {EmptyState, FilterModal} from '../components/molecule';
 import ListTransactionCard from '../components/molecule/ListCard/ListTransactionCard';
-import { Transactions } from '../interface/transaction.interface';
-import { RootStackParams } from '../navigations';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { dataFilter } from '../data/dataFilter';
+import {Transactions} from '../interface/transaction.interface';
+import {RootStackParams} from '../navigations';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import {dataFilter} from '../data/dataFilter';
 import filterTransactions from '../hooks/useFilter';
 
 const ITEM_HEIGHT = widthResponsive(100);
 
-const ListTransactionScreen = ({navigation}: {navigation: NativeStackNavigationProp<RootStackParams>}) => {
+const ListTransactionScreen = ({
+  navigation,
+}: {
+  navigation: NativeStackNavigationProp<RootStackParams>;
+}) => {
   const dispatch = useDispatch<typeof store.dispatch>();
-  const {data, loading} = useSelector(
+  const {data, loading, error} = useSelector(
     (state: ApplicationState) => state.home,
   );
 
   const [searchState, setSearchState] = useState('');
-  const [searchFilteredData, setSearchFilteredData] = useState<Transactions[]>([]);
+  const [searchFilteredData, setSearchFilteredData] = useState<Transactions[]>(
+    [],
+  );
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [selectedFilter, setSelectedFilter] = useState('URUTKAN');
 
@@ -37,8 +43,11 @@ const ListTransactionScreen = ({navigation}: {navigation: NativeStackNavigationP
 
   useEffect(() => {
     const searchText = searchState.toLowerCase();
-    const searchFiltered = transactionIds.filter((transaction) => {
-      const nameMatch = transaction?.beneficiary_name?.toString().toLowerCase().includes(searchText);
+    const searchFiltered = transactionIds.filter(transaction => {
+      const nameMatch = transaction?.beneficiary_name
+        ?.toString()
+        .toLowerCase()
+        .includes(searchText);
       return nameMatch;
     });
     setSearchFilteredData(searchFiltered);
@@ -51,45 +60,68 @@ const ListTransactionScreen = ({navigation}: {navigation: NativeStackNavigationP
 
   const onPress = ({item}: {item: Transactions}) => {
     navigation.navigate('DetailTransactionScreen', {item});
-  }
+  };
 
   const filterBtnOnPress = () => {
     setModalIsOpen(true);
-  }
+  };
 
   const handleSetFilter = (label: string) => {
     setSelectedFilter(label);
-  }
+  };
 
   return (
     <SafeAreaView style={styles.root}>
-    <>
-      {loading ? <LoadingIndicator /> : <View style={styles.bodyContainer}>
-        <SearchBar
-          value={searchState}
-          onChangeText={(newText: string) => setSearchState(newText)}
-          filterBtnOnPress={filterBtnOnPress}
-          placeholder="Cari nama, bank, atau nominal"
+      <>
+        {loading ? (
+          <LoadingIndicator />
+        ) : (
+          <View style={styles.bodyContainer}>
+            <SearchBar
+              value={searchState}
+              onChangeText={(newText: string) => setSearchState(newText)}
+              filterBtnOnPress={filterBtnOnPress}
+              placeholder="Cari nama, bank, atau nominal"
+              selectedFilter={selectedFilter}
+            />
+            <Gap height={10} />
+            {error ? (
+              <EmptyState
+                text="Gagal memuat data"
+                containerStyle={{marginTop: mvs(200)}}
+              />
+            ) : (
+              <FlatList
+                keyExtractor={item => item.id.toString()}
+                initialNumToRender={10}
+                getItemLayout={(data, index) => ({
+                  length: ITEM_HEIGHT,
+                  offset: ITEM_HEIGHT * index,
+                  index,
+                })}
+                showsVerticalScrollIndicator={false}
+                data={searchState ? searchFilteredData : transactionIds}
+                renderItem={({item}) => (
+                  <ListTransactionCard item={item} onPress={onPress} />
+                )}
+                ListEmptyComponent={
+                  <EmptyState
+                    text="Tidak ada data ditemukan"
+                    containerStyle={{marginTop: mvs(200)}}
+                  />
+                }
+              />
+            )}
+          </View>
+        )}
+        <FilterModal
+          modalVisible={modalIsOpen}
+          toggleModal={() => setModalIsOpen(false)}
+          dataFilter={dataFilter}
+          setFilter={handleSetFilter}
           selectedFilter={selectedFilter}
         />
-        <Gap height={10} />
-        <FlatList
-          keyExtractor={(item) => item.id.toString()}
-          initialNumToRender={10} 
-          getItemLayout={(data, index) => (
-            {length: ITEM_HEIGHT, offset: ITEM_HEIGHT * index, index}
-          )}
-          showsVerticalScrollIndicator={false}
-          data={searchState ? searchFilteredData : transactionIds}
-          renderItem={({item}) => (
-            <ListTransactionCard item={item} onPress={onPress} />
-          )}
-          ListEmptyComponent={<EmptyState text="Tidak ada data ditemukan" containerStyle={{marginTop: mvs(200)}}/>}
-          />
-        </View>
-      }
-      <FilterModal modalVisible={modalIsOpen} toggleModal={() => setModalIsOpen(false)} dataFilter={dataFilter} setFilter={handleSetFilter} selectedFilter={selectedFilter} />
-    </>
+      </>
     </SafeAreaView>
   );
 };
