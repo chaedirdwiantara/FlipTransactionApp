@@ -1,9 +1,6 @@
 import Gap from './Gap/Gap';
-import SearchBar from '../molecule/SearchBar/SearchBar';
 import LoadingIndicator from './Loading';
+import StatusCard from './StatusCard/StatusCard';
+import FilterButton from './FilterButton/FilterButton';
 
-export {
-  Gap,
-  SearchBar,
-  LoadingIndicator
-};
+export {Gap, StatusCard, LoadingIndicator, FilterButton};

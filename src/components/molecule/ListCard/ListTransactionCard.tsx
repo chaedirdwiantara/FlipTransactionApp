@@ -1,22 +1,35 @@
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React from 'react'
-import { color } from '../../../theme'
-import { widthResponsive } from '../../../utils/dimensionFormat'
-import { Transactions, TransactionStatus } from '../../../interface/transaction.interface'
-import { Gap } from '../../atom'
-import { capitalizeText, formatCurrency, formatDate } from '../../../utils'
-import StatusCard from '../../atom/StatusCard/StatusCard'
-import { ArrowRightIcon } from '../../../assets/icon'
+import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import React from 'react';
+import {color} from '../../../theme';
+import {widthResponsive} from '../../../utils/dimensionFormat';
+import {
+  Transactions,
+  TransactionStatus,
+} from '../../../interface/transaction.interface';
+import {Gap} from '../../atom';
+import {capitalizeText, formatCurrency, formatDate} from '../../../utils';
+import StatusCard from '../../atom/StatusCard/StatusCard';
+import {ArrowRightIcon} from '../../../assets/icon';
 
 interface Props {
   item: Transactions;
   onPress: ({item}: {item: Transactions}) => void;
 }
 
-const ListTransactionCard = ({ item, onPress }: Props) => {
+const ListTransactionCard = ({item, onPress}: Props) => {
   return (
     <TouchableOpacity style={styles.container} onPress={() => onPress({item})}>
-      <View style={[styles.cardLeftStyle, {backgroundColor: item.status.toString() === 'SUCCESS' ? color.Success[400] : color.Warning[700]}]} />
+      <View
+        style={[
+          styles.cardLeftStyle,
+          {
+            backgroundColor:
+              item.status.toString() === 'SUCCESS'
+                ? color.Success[400]
+                : color.Warning[700],
+          },
+        ]}
+      />
       <View style={styles.mainBodyContainer}>
         <View style={styles.bankContainer}>
           <Text style={[styles.textStyle, {fontWeight: 'bold'}]}>
@@ -36,20 +49,20 @@ const ListTransactionCard = ({ item, onPress }: Props) => {
           <Text style={styles.textStyle}>
             {formatCurrency(parseInt(item.amount.toString()))}
           </Text>
-          <View style={styles.dotContainer}/>
+          <View style={styles.dotContainer} />
           <Text style={styles.textStyle}>
             {formatDate(item.created_at.toString())}
           </Text>
         </View>
-      </View> 
+      </View>
       <View style={styles.statusCardContainer}>
         <StatusCard status={item.status.toString() as TransactionStatus} />
       </View>
     </TouchableOpacity>
-  )
-}
+  );
+};
 
-export default ListTransactionCard
+export default ListTransactionCard;
 
 const styles = StyleSheet.create({
   container: {
@@ -93,4 +106,4 @@ const styles = StyleSheet.create({
     marginHorizontal: widthResponsive(4),
     marginTop: widthResponsive(2),
   },
-})
+});

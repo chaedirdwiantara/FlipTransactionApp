@@ -1,24 +1,22 @@
-import { StyleSheet, Text, View } from 'react-native'
-import React from 'react'
-import { widthResponsive } from '../../../utils/dimensionFormat'
-import { color } from '../../../theme'
-import { TransactionStatus } from '../../../interface/transaction.interface'
+import {StyleSheet, Text, View} from 'react-native';
+import React from 'react';
+import {widthResponsive} from '../../../utils/dimensionFormat';
+import {color} from '../../../theme';
+import {TransactionStatus} from '../../../interface/transaction.interface';
 
 const StatusCard = ({status}: {status: TransactionStatus}) => {
-  return (
-    status === "SUCCESS" ? (
-      <View style={styles.successContainer}>
-        <Text style={styles.successTextStyle}>{'Berhasil'}</Text>
-      </View>
-    ) : (
-      <View style={styles.pendingContainer}>
-        <Text style={styles.pendingTextStyle}>{'Pengecekan'}</Text>
-      </View>
-    )
-  )
-}
+  return status === 'SUCCESS' ? (
+    <View style={styles.successContainer}>
+      <Text style={styles.successTextStyle}>{'Berhasil'}</Text>
+    </View>
+  ) : (
+    <View style={styles.pendingContainer}>
+      <Text style={styles.pendingTextStyle}>{'Pengecekan'}</Text>
+    </View>
+  );
+};
 
-export default StatusCard
+export default StatusCard;
 
 const styles = StyleSheet.create({
   successContainer: {
@@ -45,4 +43,4 @@ const styles = StyleSheet.create({
     fontSize: widthResponsive(12),
     fontWeight: 'bold',
   },
-})
+});

@@ -2,7 +2,7 @@ import React from 'react';
 import {StyleSheet, TextInputProps, View, ViewStyle} from 'react-native';
 import {color} from '../../../theme';
 import SearchIcon from '../../../assets/icon/Search.icon';
-import Search from '../InputText/Search';
+import InputText from '../InputText/InputText';
 
 interface SearchProps extends TextInputProps {
   fontSize?: number;
@@ -19,10 +19,17 @@ interface SearchProps extends TextInputProps {
 }
 
 const SearchBar: React.FC<SearchProps> = props => {
-  const {onChangeText, value, filterBtnOnPress, containerStyle, placeholder, selectedFilter} = props;
+  const {
+    onChangeText,
+    value,
+    filterBtnOnPress,
+    containerStyle,
+    placeholder,
+    selectedFilter,
+  } = props;
   return (
     <View style={[styles.container, containerStyle]}>
-      <Search
+      <InputText
         value={value}
         onChangeText={onChangeText}
         placeholder={placeholder}
@@ -30,7 +37,7 @@ const SearchBar: React.FC<SearchProps> = props => {
         filterOnPress={filterBtnOnPress}
         containerStyle={styles.inputContainer}
         selectedFilter={selectedFilter}
-        {...(({ selectedFilter, ...rest }) => rest)(props)}
+        {...(({selectedFilter, ...rest}) => rest)(props)}
       />
     </View>
   );

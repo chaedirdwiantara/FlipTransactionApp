@@ -55,11 +55,7 @@ const FilterModal: FC<ModalFilterProps> = (props: ModalFilterProps) => {
           style={{marginHorizontal: 0}}
           onBackButtonPress={toggleModal}
           onModalHide={onModalHide}>
-          <View
-            style={[
-              styles.container,
-              containerStyle,
-            ]}>
+          <View style={[styles.container, containerStyle]}>
             {dataFilter.map((item, index) => (
               <FilterButton
                 key={index.toString()}
