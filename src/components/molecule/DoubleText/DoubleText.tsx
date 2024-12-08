@@ -1,12 +1,13 @@
-import { StyleSheet, Text, View, ViewStyle } from 'react-native'
-import React from 'react'
-import { widthResponsive } from '../../../utils/dimensionFormat';
+import {StyleSheet, Text, View, ViewStyle} from 'react-native';
+import React from 'react';
+import {widthResponsive} from '../../../utils/dimensionFormat';
 import Gap from '../../atom/Gap/Gap';
+import {color} from '../../../theme';
 
 interface DoubleTextProps {
-    title: string;
-    value: string;
-    style?: ViewStyle;
+  title: string;
+  value: string;
+  style?: ViewStyle;
 }
 
 const DoubleText = ({title, value, style}: DoubleTextProps) => {
@@ -16,20 +17,22 @@ const DoubleText = ({title, value, style}: DoubleTextProps) => {
       <Gap height={4} />
       <Text style={styles.value}>{value}</Text>
     </View>
-  )
-}
+  );
+};
 
-export default DoubleText
+export default DoubleText;
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-    },
-    title: {
-        fontSize: widthResponsive(16),
-        fontWeight: '600',
-    },
-    value: {
-        fontSize: widthResponsive(16),
-    },
-})
+  container: {
+    flex: 1,
+  },
+  title: {
+    fontSize: widthResponsive(16),
+    color: color.Dark[900],
+    fontWeight: '600',
+  },
+  value: {
+    fontSize: widthResponsive(16),
+    color: color.Dark[900],
+  },
+});
