@@ -4,17 +4,21 @@ import {color} from '../theme';
 import {widthResponsive} from '../utils';
 import {useDispatch, useSelector} from 'react-redux';
 import {ApplicationState} from '../interface/redux.interface';
-import {fetchDataRequest, updateSortedData} from '../redux/actions/home';
+import {
+  fetchDataRequest,
+  updateSortedData,
+} from '../redux/actions/transactions.action';
 import store from '../redux/store';
-import {Gap, LoadingIndicator, SearchBar} from '../components/atom';
+import {Gap, LoadingIndicator} from '../components/atom';
 import {mvs} from 'react-native-size-matters';
-import {EmptyState, FilterModal} from '../components/molecule';
+import {EmptyState, FilterModal, SearchBar} from '../components/molecule';
 import ListTransactionCard from '../components/molecule/ListCard/ListTransactionCard';
 import {Transactions} from '../interface/transaction.interface';
 import {RootStackParams} from '../navigations';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {dataFilter} from '../data/dataFilter';
 import filterTransactions from '../hooks/useFilter';
+import {filterTransactionsBySearch} from '../hooks/useSearchFilter';
 
 const ITEM_HEIGHT = widthResponsive(100);
 
@@ -25,7 +29,7 @@ const ListTransactionScreen = ({
 }) => {
   const dispatch = useDispatch<typeof store.dispatch>();
   const {data, loading, error} = useSelector(
-    (state: ApplicationState) => state.home,
+    (state: ApplicationState) => state.transactions,
   );
 
   const [searchState, setSearchState] = useState('');
@@ -42,15 +46,11 @@ const ListTransactionScreen = ({
   }, [dispatch]);
 
   useEffect(() => {
-    const searchText = searchState.toLowerCase();
-    const searchFiltered = transactionIds.filter(transaction => {
-      const nameMatch = transaction?.beneficiary_name
-        ?.toString()
-        .toLowerCase()
-        .includes(searchText);
-      return nameMatch;
-    });
-    setSearchFilteredData(searchFiltered);
+    const filteredData = filterTransactionsBySearch(
+      transactionIds,
+      searchState,
+    );
+    setSearchFilteredData(filteredData);
   }, [searchState]);
 
   useEffect(() => {
