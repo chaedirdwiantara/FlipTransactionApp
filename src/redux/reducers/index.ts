@@ -1,8 +1,8 @@
 import { combineReducers } from 'redux';
-import homeReducer from './home';
+import transactionsReducer from './transactions.reducer';
 
 const rootReducer = combineReducers({
-  home: homeReducer,
+  transactions: transactionsReducer,
   // ...other reducers
 });
 

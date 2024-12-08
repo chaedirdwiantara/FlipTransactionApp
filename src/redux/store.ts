@@ -1,15 +1,15 @@
-import { createStore, applyMiddleware, Store, AnyAction } from 'redux';
+import {configureStore} from '@reduxjs/toolkit';
 import createSagaMiddleware from 'redux-saga';
-import rootReducer from './reducers'; // correct the path if needed
-import rootSaga from './sagas'; // correct the path if needed
-import { ApplicationState } from '../interface/redux.interface'; // update this path
+import rootReducer from './reducers';
+import rootSaga from './sagas';
 
 const sagaMiddleware = createSagaMiddleware();
 
-const store: Store<ApplicationState, AnyAction> = createStore(
-  rootReducer,
-  applyMiddleware(sagaMiddleware)
-);
+const store = configureStore({
+  reducer: rootReducer,
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware().concat(sagaMiddleware),
+});
 
 sagaMiddleware.run(rootSaga);
 
