@@ -1,13 +1,10 @@
 import {FlatList, SafeAreaView, StyleSheet, View} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {color} from '../theme';
-import {widthResponsive} from '../utils';
+import {filterTransactionsBySearch, widthResponsive} from '../utils';
 import {useDispatch, useSelector} from 'react-redux';
 import {ApplicationState} from '../interface/redux.interface';
-import {
-  fetchDataRequest,
-  updateSortedData,
-} from '../redux/actions/transactions.action';
+import {fetchDataRequest} from '../redux/actions/transactions.action';
 import store from '../redux/store';
 import {Gap, LoadingIndicator} from '../components/atom';
 import {mvs} from 'react-native-size-matters';
@@ -17,8 +14,7 @@ import {Transactions} from '../interface/transaction.interface';
 import {RootStackParams} from '../navigations';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {dataFilter} from '../data/dataFilter';
-import filterTransactions from '../hooks/useFilter';
-import {filterTransactionsBySearch} from '../hooks/useSearchFilter';
+import useFilter from '../hooks/useFilter';
 
 const ITEM_HEIGHT = widthResponsive(100);
 
@@ -53,10 +49,7 @@ const ListTransactionScreen = ({
     setSearchFilteredData(filteredData);
   }, [searchState]);
 
-  useEffect(() => {
-    const filtered = filterTransactions(transactionIds, selectedFilter);
-    dispatch(updateSortedData(filtered));
-  }, [selectedFilter]);
+  useFilter(transactionIds, selectedFilter);
 
   const onPress = ({item}: {item: Transactions}) => {
     navigation.navigate('DetailTransactionScreen', {item});
